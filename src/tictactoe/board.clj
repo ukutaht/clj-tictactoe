@@ -3,7 +3,7 @@
 (declare no-player? valid-move? player? winner
          invalid-move  no-winner?  resolve-combinations
          resolve-combination pick-indices
-         keep-all-same-lines remove-non-players get-the-mark
+         keep-all-same-lines get-the-mark
          all-same?)
 
 (def x-player  :x)
@@ -45,7 +45,6 @@
   (-> board
       resolve-combinations
       keep-all-same-lines
-      remove-non-players
       get-the-mark))
 
 (defn- resolve-combinations [board]
@@ -53,9 +52,6 @@
 
 (defn- keep-all-same-lines [combinations]
   (filter all-same? combinations))
-
-(defn- remove-non-players [combinations]
-  (filter (partial every? player?) combinations))
 
 (defn get-the-mark [combinations]
   (first (first combinations)))
