@@ -1,14 +1,11 @@
-(ns clj-tictactoe.board-spec
+(ns tictactoe.board_spec
   (:require [speclj.core :refer :all]
-            [clj-tictactoe.board :refer :all]))
+            [tictactoe.board :refer :all]))
 
-(def _ no-player)
 (def x x-player)
 (def o o-player)
 
 (describe "board"
-  (def empty-board [_ _ _ _ _ _ _ _ _])
-
   (context "making moves"
     (it "marks first square on board"
       (let [marked-board (mark-square empty-board 0 x-player) ]
@@ -47,16 +44,16 @@
                         x x o])
 
     (context "win"
-      (def horizontal-win-boards  [[x x x _ _ _ _ _ _]
-                                   [_ _ _ x x x _ _ _]
-                                   [_ _ _ _ _ _ x x x]])
+      (def horizontal-win-boards  [[x x x 3 4 5 6 7 8]
+                                   [0 1 2 x x x 6 7 8]
+                                   [0 1 2 3 4 5 x x x]])
 
-      (def vertical-win-boards    [[x _ _ x _ _ x _ _]
-                                   [_ x _ _ x _ _ x _]
-                                   [_ _ x _ _ x _ _ x]])
+      (def vertical-win-boards    [[x 1 2 x 4 5 x 7 8]
+                                   [0 x 2 3 x 5 6 x 8]
+                                   [0 1 x 3 4 x 6 7 x]])
 
-      (def diagonal-win-boards    [[x - _ _ x _ _ _ x]
-                                   [_ _ x _ x _ x _ _]])
+      (def diagonal-win-boards    [[x 1 2 3 x 5 6 7 x]
+                                   [0 1 x 3 x 5 x 7 8]])
 
       (it "has no winner when empty"
         (should-not (has-winner? empty-board)))
@@ -78,6 +75,9 @@
 
       (it "returns the winner the it's o"
          (should= o (winner o-wins-board)))
+
+      (it "returns nil when no winner"
+         (should-be-nil (winner draw-board)))
 
     (context "draw"
       (it "is not a draw when the board is empty"
