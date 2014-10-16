@@ -74,6 +74,17 @@
       (it "is a draw when the board is full and has no winner"
         (should (draw? draw-board)))))
 
+    (context "over"
+      (it "empty is not over"
+        (should-not (over? empty-board)))
+
+      (it "winning state is over"
+        (should (over? x-wins-board)))
+
+      (it "draw is over"
+        (should (over? draw-board)))
+      )
+
   (it "can access rows" 
     (should= [[0 1 2] [3 4 5] [6 7 8]] (rows empty-board)))
 )

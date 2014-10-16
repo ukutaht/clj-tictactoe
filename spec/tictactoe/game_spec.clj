@@ -5,7 +5,7 @@
        [tictactoe.io :as io]
        [tictactoe.game]))
 
-(declare fake-moves)
+(declare fake-moves null-io)
 
 (describe "game"
   (defn make-get-move [move]
@@ -19,22 +19,29 @@
 
   (defn play-game-with-moves [moves]
     (with-redefs [fake-moves (atom moves)]
-      (with-out-str
-        (play empty-board player-marks (take-from fake-moves) command-line-io))))
+      (play empty-board player-marks (take-from fake-moves) null-io)))
+
+  (def null-io
+    {:show-board (fn [_board])
+     :present-winner (fn [_board])})
 
   (context "playing the whole game"
     (it "terminates with x winner"
-      (let [output (play-game-with-moves '(0 3 1 4 2))]
-        (should (.contains output "X wins"))))
+      (let [result (play-game-with-moves '(0 3 1 4 2))]
+        (should= x-player (winner result))))
 
     (it "terminates with o winner"
-      (let [output (play-game-with-moves '(3 0 4 1 6 2))]
-        (should (.contains output "O wins")))))
+      (let [result (play-game-with-moves '(3 0 4 1 6 2))]
+        (should= o-player (winner result))))
+
+    (it "terminates with draw"
+      (let [result (play-game-with-moves '(0 1 2 4 3 6 5 8 7))]
+        (should (draw? result)))))
 
   (context "play move"
     (defn play-x-move-on-empty-board [move]
       (let [get-move (make-get-move move)]
-        (play-move empty-board x-player get-move command-line-io)))
+        (play-move empty-board x-player get-move null-io)))
 
     (it "plays the move on board"
       (let [played (play-x-move-on-empty-board 0)]

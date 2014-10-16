@@ -2,10 +2,10 @@
   (use [tictactoe.players :as players]))
 
 (declare no-player? valid-move? player? winner
-         invalid-move  no-winner?  resolve-combinations
-         resolve-combination pick-indices
-         keep-all-same-lines get-the-mark
-         all-same?)
+         invalid-move  has-winner? no-winner?
+         resolve-combinations resolve-combination
+         pick-indices keep-all-same-lines
+         get-the-mark all-same? draw?)
 
 (def empty-board [0 1 2
                   3 4 5
@@ -28,6 +28,11 @@
   (and 
     (contains? board move)
     (no-player? (square-at board move))))
+
+(defn over? [board]
+  (or
+    (has-winner? board)
+    (draw? board)))
 
 (defn has-winner? [board]
   (not (nil? (winner board))))
