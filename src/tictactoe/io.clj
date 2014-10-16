@@ -2,7 +2,7 @@
   (use [tictactoe.board]
        [clojure.string :only (upper-case)]))
 
-(declare lines render-line format-cell)
+(declare show-board present-winner lines render-line format-cell)
 
 (defn show-board [board]
   (print (apply str (lines board))))
@@ -25,3 +25,5 @@
 (defmethod format-cell clojure.lang.Keyword [mark]
   (upper-case (name mark)))
 
+(def command-line-io {:show-board show-board
+                      :present-winner present-winner})

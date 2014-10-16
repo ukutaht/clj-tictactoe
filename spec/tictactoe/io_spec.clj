@@ -8,9 +8,14 @@
 (describe "command line io"
   (it "displays the board in correct format"
     (let [board (-> empty-board (mark-square 0 x-player) (mark-square 8 o-player))
-          output      (with-out-str (io/show-board board))]
+          output      (with-out-str ((command-line-io :show-board) board))]
       (should= "X | 2 | 3\n4 | 5 | 6\n7 | 8 | O\n" output)))
 
-  (it "presents the winner"
-    (let [output (with-out-str (io/present-winner x-wins-board))]
-      (should= "X wins\n" output))))
+  (it "presents the winner X"
+    (let [output (with-out-str ((command-line-io :present-winner) x-wins-board))]
+      (should= "X wins\n" output)))
+
+  (it "presents the winner O"
+    (let [output (with-out-str ((command-line-io :present-winner) o-wins-board))]
+      (should= "O wins\n" output)))
+  )

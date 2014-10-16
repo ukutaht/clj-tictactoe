@@ -11,7 +11,6 @@
   (defn make-get-move [move]
     (fn [board] move))
 
-
   (defn take-from [move-list] 
     (fn [board]
       (let [move (peek (deref move-list))]
@@ -21,7 +20,7 @@
   (defn play-game-with-moves [moves]
     (with-redefs [fake-moves (atom moves)]
       (with-out-str
-        (play empty-board player-marks (take-from fake-moves)))))
+        (play empty-board player-marks (take-from fake-moves) command-line-io))))
 
   (context "playing the whole game"
     (it "terminates with x winner"
@@ -35,7 +34,7 @@
   (context "play move"
     (defn play-x-move-on-empty-board [move]
       (let [get-move (make-get-move move)]
-        (play-move empty-board x-player get-move)))
+        (play-move empty-board x-player get-move command-line-io)))
 
     (it "plays the move on board"
       (let [played (play-x-move-on-empty-board 0)]
