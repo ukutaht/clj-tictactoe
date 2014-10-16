@@ -8,11 +8,8 @@
 (declare fake-moves null-io)
 
 (describe "game"
-  (defn make-get-move [move]
-    (fn [board] move))
-
   (defn take-from [move-list] 
-    (fn [board]
+    (fn [_]
       (let [move (peek (deref move-list))]
         (swap! move-list pop)
          move)))
@@ -36,17 +33,17 @@
 
     (it "terminates with draw"
       (let [result (play-game-with-moves '(0 1 2 4 3 6 5 8 7))]
-        (should (draw? result)))))
+        (should-be draw? result))))
 
   (context "play move"
     (defn play-x-move-on-empty-board [move]
-      (let [get-move (make-get-move move)]
+      (let [get-move (fn [_] move)]
         (play-move empty-board x-player get-move null-io)))
 
     (it "plays the move on board"
       (let [played (play-x-move-on-empty-board 0)]
-        (should= (square-at played 0) x-player))))
+        (should= (square-at played 0) x-player)))
 
     (it "does not make the move if it is invalid"
       (let [played (play-x-move-on-empty-board 9)]
-        (should= empty-board played))))
+        (should= empty-board played)))))
