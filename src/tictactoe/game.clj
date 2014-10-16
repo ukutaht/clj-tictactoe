@@ -18,10 +18,6 @@
       (mark-square board move (player :mark))
       board)))
 
-(defn we-have-a-winner [board io]
+(defn- we-have-a-winner [board io]
   ((io :present-winner) board)
   board)
-
-(defn get-the-move [board]
-  (println "Your move")
-  (- (Integer/parseInt (read-line)) 2))
