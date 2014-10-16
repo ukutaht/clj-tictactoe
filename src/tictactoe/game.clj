@@ -16,8 +16,13 @@
   (let [move ((player :get-move) board)]
     (if (valid-move? board move)
       (mark-square board move (player :mark))
-      board)))
+      (do 
+        ((io :notify-invalid-move))
+        board))))
 
 (defn- we-have-a-winner [board io]
-  ((io :present-winner) board)
+  ((io :announce-results) board)
   board)
+
+(defn -main []
+  (play empty-board human-vs-human command-line-io))

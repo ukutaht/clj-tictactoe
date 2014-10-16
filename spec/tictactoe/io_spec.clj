@@ -7,15 +7,22 @@
 
 (describe "command line io"
   (it "displays the board in correct format"
-    (with-redefs [io/clear-screen #()]
-      (let [board   [x-mark 1 2 3 4 5 6 7 o-mark]
-            output  (with-out-str ((command-line-io :show-board) board))]
-        (should= "X | 2 | 3\n4 | 5 | 6\n7 | 8 | O\n" output))))
+    (let [board   [x-mark 1 2 3 4 5 6 7 o-mark]
+          output  (with-out-str ((command-line-io :show-board) board))]
+      (should= "\nX | 2 | 3\n4 | 5 | 6\n7 | 8 | O\n\n" output)))
 
   (it "presents the winner X"
-    (let [output (with-out-str ((command-line-io :present-winner) x-wins-board))]
+    (let [output (with-out-str ((command-line-io :announce-results) x-wins-board))]
       (should= "X wins\n" output)))
 
   (it "presents the winner O"
-    (let [output (with-out-str ((command-line-io :present-winner) o-wins-board))]
-      (should= "O wins\n" output))))
+    (let [output (with-out-str ((command-line-io :announce-results) o-wins-board))]
+      (should= "O wins\n" output)))
+
+  (it "announces draw"
+    (let [output (with-out-str ((command-line-io :announce-results) draw-board))]
+      (should= "It's a draw\n" output)))
+
+  (it "notifies invalid move"
+    (let [output (with-out-str ((command-line-io :notify-invalid-move)))]
+      (should= "Invalid move, try again\n" output))))

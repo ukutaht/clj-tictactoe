@@ -4,10 +4,16 @@
        [tictactoe.board]))
 
 (describe "console player"
-  (it "reads move from stdin"
+  (it "asks for move"
     (with-in-str "3"
-      (should= 2 (get-move empty-board))))
+      (let [output (with-out-str (get-move empty-board))]
+        (should= "Your move:" output))))
 
-  (it "returns appropriate keyword if input is complete rubbish"
-    (with-in-str "not-a-digit"
-      (should= :none (get-move empty-board)))))
+  (with-redefs [*out* (new java.io.StringWriter)]
+    (it "reads move from stdin"
+      (with-in-str "3"
+        (should= 2 (get-move empty-board))))
+
+    (it "returns appropriate keyword if input is complete rubbish"
+      (with-in-str "not-a-digit"
+        (should= :none (get-move empty-board))))))

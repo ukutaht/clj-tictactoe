@@ -22,7 +22,8 @@
 
   (def null-io
     {:show-board (fn [_board])
-     :present-winner (fn [_board])})
+     :announce-results (fn [_board])
+     :notify-invalid-move (fn [])})
 
   (defn take-from [move-list] 
     (fn [_]
@@ -55,4 +56,10 @@
 
     (it "does not make the move if it is invalid"
       (let [played (play-x-move-on-empty-board 9)]
-        (should= empty-board played)))))
+        (should= empty-board played)))
+
+    (it "shows the board"
+      (should-invoke null-io {:with [:show-board] :invoke null-io} (play-x-move-on-empty-board 7)))
+
+    (it "notifies io if move is invalid"
+      (should-invoke null-io {:with [:notify-invalid-move] :invoke null-io} (play-x-move-on-empty-board 9)))))
