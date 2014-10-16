@@ -1,13 +1,11 @@
-(ns tictactoe.board)
+(ns tictactoe.board
+  (use [tictactoe.players :as players]))
 
 (declare no-player? valid-move? player? winner
          invalid-move  no-winner?  resolve-combinations
          resolve-combination pick-indices
          keep-all-same-lines get-the-mark
          all-same?)
-
-(def x-player  :x)
-(def o-player  :o)
 
 (def empty-board [0 1 2
                   3 4 5
@@ -47,6 +45,9 @@
       keep-all-same-lines
       get-the-mark))
 
+(defn rows [board]
+  (partition 3 board))
+
 (defn- resolve-combinations [board]
   (map resolve-combination (repeat board) winning-combinations))
 
@@ -67,8 +68,8 @@
 
 (defn- player? [mark]
   (or 
-    (= mark x-player)
-    (= mark o-player)))
+    (= mark players/x-player)
+    (= mark players/o-player)))
 
 (def no-player? (complement player?))
 

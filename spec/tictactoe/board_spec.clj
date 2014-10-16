@@ -1,9 +1,8 @@
 (ns tictactoe.board_spec
-  (:require [speclj.core :refer :all]
-            [tictactoe.board :refer :all]))
-
-(def x x-player)
-(def o o-player)
+  (use [speclj.core]
+       [tictactoe.spec_helper]
+       [tictactoe.players]
+       [tictactoe.board]))
 
 (describe "board"
   (context "making moves"
@@ -31,18 +30,6 @@
 
   
   (context "terminal states"
-    (def draw-board  [x o x
-                      x o x
-                      o x o])
-
-    (def x-wins-board  [x x x
-                        x o o
-                        o x o])
-
-    (def o-wins-board  [x o o
-                        o x o
-                        x x o])
-
     (context "win"
       (def horizontal-win-boards  [[x x x 3 4 5 6 7 8]
                                    [0 1 2 x x x 6 7 8]
@@ -86,4 +73,7 @@
         (should-not (draw? x-wins-board)))
       (it "is a draw when the board is full and has no winner"
         (should (draw? draw-board)))))
+
+  (it "can access rows" 
+    (should= [[0 1 2] [3 4 5] [6 7 8]] (rows empty-board)))
 )
