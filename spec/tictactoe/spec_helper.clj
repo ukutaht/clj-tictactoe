@@ -1,8 +1,8 @@
 (ns tictactoe.spec_helper
   (use [tictactoe.players]))
 
-(def x x-player)
-(def o o-player)
+(def x x-mark)
+(def o o-mark)
 
 (def draw-board  [x o x
                   x o x

@@ -1,6 +1,6 @@
 (ns tictactoe.players)
 
-(def x-player  :x)
-(def o-player  :o)
+(def x-mark  :x)
+(def o-mark  :o)
 
-(def player-marks (cycle [x-player o-player]))
+(def player-marks (cycle [x-mark o-mark]))

@@ -7,19 +7,19 @@
 (describe "board"
   (context "making moves"
     (it "marks first square on board"
-      (let [marked-board (mark-square empty-board 0 x-player) ]
-        (should= x-player (square-at marked-board 0))))
+      (let [marked-board (mark-square empty-board 0 x-mark) ]
+        (should= x-mark (square-at marked-board 0))))
 
     (it "marks last square on board"
-      (let [marked-board (mark-square empty-board 8 o-player) ]
-        (should= o-player (square-at marked-board 8))))
+      (let [marked-board (mark-square empty-board 8 o-mark) ]
+        (should= o-mark (square-at marked-board 8))))
 
     (it "throws exception when trying to play an invalid move"
       (should-throw java.lang.IllegalArgumentException (mark-square empty-board -1))))
 
   (context "move validity"
     (it "is invalid if a move has been played at the index"
-      (let [marked-board (mark-square empty-board 0 x-player) ]
+      (let [marked-board (mark-square empty-board 0 x-mark) ]
         (should-not (valid-move? marked-board 0))))
 
     (it "is invalid if move is over bounds"

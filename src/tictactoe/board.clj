@@ -1,7 +1,7 @@
 (ns tictactoe.board
   (use [tictactoe.players :as players]))
 
-(declare no-player? valid-move? player? winner
+(declare no-mark? valid-move? player? winner
          invalid-move  has-winner? no-winner?
          resolve-combinations resolve-combination
          pick-indices keep-all-same-lines
@@ -27,7 +27,7 @@
 (defn valid-move? [board move]
   (and 
     (contains? board move)
-    (no-player? (square-at board move))))
+    (no-mark? (square-at board move))))
 
 (defn over? [board]
   (or
@@ -73,10 +73,10 @@
 
 (defn- player? [mark]
   (or 
-    (= mark players/x-player)
-    (= mark players/o-player)))
+    (= mark players/x-mark)
+    (= mark players/o-mark)))
 
-(def no-player? (complement player?))
+(def no-mark? (complement player?))
 
 (defn- invalid-move [move]
   (throw (java.lang.IllegalArgumentException. (str "Invalid move " move))))

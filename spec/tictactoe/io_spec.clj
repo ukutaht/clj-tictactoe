@@ -7,7 +7,7 @@
 
 (describe "command line io"
   (it "displays the board in correct format"
-    (let [board (-> empty-board (mark-square 0 x-player) (mark-square 8 o-player))
+    (let [board (-> empty-board (mark-square 0 x-mark) (mark-square 8 o-mark))
           output      (with-out-str ((command-line-io :show-board) board))]
       (should= "X | 2 | 3\n4 | 5 | 6\n7 | 8 | O\n" output)))
 

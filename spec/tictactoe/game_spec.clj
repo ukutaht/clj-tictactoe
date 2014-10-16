@@ -25,11 +25,11 @@
   (context "playing the whole game"
     (it "terminates with x winner"
       (let [result (play-game-with-moves '(0 3 1 4 2))]
-        (should= x-player (winner result))))
+        (should= x-mark (winner result))))
 
     (it "terminates with o winner"
       (let [result (play-game-with-moves '(3 0 4 1 6 2))]
-        (should= o-player (winner result))))
+        (should= o-mark (winner result))))
 
     (it "terminates with draw"
       (let [result (play-game-with-moves '(0 1 2 4 3 6 5 8 7))]
@@ -38,11 +38,11 @@
   (context "play move"
     (defn play-x-move-on-empty-board [move]
       (let [get-move (fn [_] move)]
-        (play-move empty-board x-player get-move null-io)))
+        (play-move empty-board x-mark get-move null-io)))
 
     (it "plays the move on board"
       (let [played (play-x-move-on-empty-board 0)]
-        (should= (square-at played 0) x-player)))
+        (should= (square-at played 0) x-mark)))
 
     (it "does not make the move if it is invalid"
       (let [played (play-x-move-on-empty-board 9)]
