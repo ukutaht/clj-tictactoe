@@ -1,22 +1,27 @@
 (ns tictactoe.game
   (use [tictactoe.board]
+       [tictactoe.players]
        [tictactoe.io :as io]))
 
 (declare play-move we-have-a-winner)
 
-(defn play [board players get-move io]
+(defn play [board players io]
   (if (over? board)
     (we-have-a-winner board io)
-    (let [new-board (play-move board (first players) get-move io)]
-      (play new-board (rest players) get-move io))))
+    (let [new-board (play-move board (first players) io)]
+      (play new-board (rest players) io))))
 
-(defn play-move [board player get-move io]
+(defn play-move [board player io]
   ((io :show-board) board)
-  (let [move (get-move board)]
+  (let [move ((player :get-move) board)]
     (if (valid-move? board move)
-      (mark-square board move player)
+      (mark-square board move (player :mark))
       board)))
 
 (defn we-have-a-winner [board io]
   ((io :present-winner) board)
   board)
+
+(defn get-the-move [board]
+  (println "Your move")
+  (- (Integer/parseInt (read-line)) 2))

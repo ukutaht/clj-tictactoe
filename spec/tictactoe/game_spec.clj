@@ -5,22 +5,30 @@
        [tictactoe.io :as io]
        [tictactoe.game]))
 
-(declare fake-moves null-io)
+(declare fake-moves null-io fake-players fake-player take-from)
 
 (describe "game"
+  (defn play-game-with-moves [moves]
+    (with-redefs [fake-moves (atom moves)]
+      (play empty-board (fake-players fake-moves) null-io)))
+
+  (defn fake-players [moves]
+    (cycle [ (fake-player x-mark moves) 
+             (fake-player o-mark moves)]))
+
+  (defn fake-player [mark moves]
+    {:mark mark
+     :get-move (take-from moves)})
+
+  (def null-io
+    {:show-board (fn [_board])
+     :present-winner (fn [_board])})
+
   (defn take-from [move-list] 
     (fn [_]
       (let [move (peek (deref move-list))]
         (swap! move-list pop)
          move)))
-
-  (defn play-game-with-moves [moves]
-    (with-redefs [fake-moves (atom moves)]
-      (play empty-board player-marks (take-from fake-moves) null-io)))
-
-  (def null-io
-    {:show-board (fn [_board])
-     :present-winner (fn [_board])})
 
   (context "playing the whole game"
     (it "terminates with x winner"
@@ -37,8 +45,9 @@
 
   (context "play move"
     (defn play-x-move-on-empty-board [move]
-      (let [get-move (fn [_] move)]
-        (play-move empty-board x-mark get-move null-io)))
+      (with-redefs [fake-moves (atom (list move))]
+        (let [player (fake-player x-mark fake-moves)]
+          (play-move empty-board player null-io))))
 
     (it "plays the move on board"
       (let [played (play-x-move-on-empty-board 0)]
