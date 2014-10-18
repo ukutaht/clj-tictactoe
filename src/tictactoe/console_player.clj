@@ -1,14 +1,17 @@
 (ns tictactoe.console_player)
 
-(declare valid-input? clean)
+(declare valid-input? clean ask-for-move)
 
 (defn get-move [board]
-  (print "Your move:")
-  (flush)
+  (ask-for-move)
   (let [input (read-line)]
     (if (valid-input? input)
       (clean input)
      :none)))
+
+(defn ask-for-move []
+  (print "Your move:")
+  (flush))
 
 (defn valid-input? [input]
   (re-matches #"\d" input))
