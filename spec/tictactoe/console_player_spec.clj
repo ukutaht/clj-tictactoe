@@ -9,11 +9,10 @@
       (let [output (with-out-str (get-move empty-board))]
         (should= "Your move:" output))))
 
-  (with-redefs [*out* (new java.io.StringWriter)]
     (it "reads move from stdin"
       (with-in-str "3"
-        (should= 2 (get-move empty-board))))
+        (should= 2 (with-redefs [*out* (new java.io.StringWriter)](get-move empty-board)))))
 
     (it "returns appropriate keyword if input is complete rubbish"
       (with-in-str "not-a-digit"
-        (should= :none (get-move empty-board))))))
+        (should= :none (with-redefs [*out* (new java.io.StringWriter)](get-move empty-board))))))
