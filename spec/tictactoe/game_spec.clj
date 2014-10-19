@@ -2,6 +2,7 @@
   (use [speclj.core]
        [tictactoe.board]
        [tictactoe.players]
+       [tictactoe.player_marks]
        [tictactoe.io :as io]
        [tictactoe.game]))
 

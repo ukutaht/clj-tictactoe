@@ -1,7 +1,7 @@
 (ns tictactoe.board_spec
   (use [speclj.core]
        [tictactoe.spec_helper]
-       [tictactoe.players]
+       [tictactoe.player_marks]
        [tictactoe.board]))
 
 (describe "board"
@@ -26,8 +26,16 @@
       (should-not (valid-move? empty-board 9)))
 
     (it "is invalid if move is under bounds"
-      (should-not (valid-move? empty-board -1))))
+      (should-not (valid-move? empty-board -1)))
 
+    (it "provides a list of valid moves"
+      (should= [0 3 5 7 8] (valid-moves [0 x x 3 o 5 o 7 8])))
+
+    (it "all moves are valid for empty board"
+      (should= [0 1 2 3 4 5 6 7 8] (valid-moves empty-board)))
+
+    (it "valid moves are empty when game is over"
+      (should= [] (valid-moves [x x x 3 4 5 6 7 8]))))
   
   (context "terminal states"
     (context "win"

@@ -3,6 +3,7 @@
        [tictactoe.board]
        [tictactoe.spec_helper]
        [tictactoe.players]
+       [tictactoe.player_marks]
        [tictactoe.io :as io]))
 
 (describe "command line io"

@@ -1,11 +1,11 @@
 (ns tictactoe.board
-  (use [tictactoe.players :as players]))
+  (use [tictactoe.player_marks :as players]))
 
 (declare no-mark? valid-move? player? winner
          invalid-move  has-winner? no-winner?
          resolve-combinations resolve-combination
-         pick-indices keep-all-same-lines
-         get-the-mark all-same? draw?)
+         pick-indices keep-all-same-lines over?
+         get-the-mark all-same? draw? valid-moves)
 
 (def empty-board [0 1 2
                   3 4 5
@@ -25,9 +25,12 @@
   (nth board index))
 
 (defn valid-move? [board move]
-  (and 
-    (contains? board move)
-    (no-mark? (square-at board move))))
+  (some #{move} (valid-moves board)))
+
+(defn valid-moves [board]
+  (if (over? board)
+    []
+    (filter no-mark? board)))
 
 (defn over? [board]
   (or

@@ -25,4 +25,4 @@
   board)
 
 (defn -main []
-  (play empty-board human-vs-human command-line-io))
+  (play empty-board computer-vs-human command-line-io))

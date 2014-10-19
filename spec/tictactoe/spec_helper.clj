@@ -1,5 +1,5 @@
 (ns tictactoe.spec_helper
-  (use [tictactoe.players]))
+  (use [tictactoe.player_marks]))
 
 (def x x-mark)
 (def o o-mark)

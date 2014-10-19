@@ -1,5 +1,6 @@
 (ns tictactoe.players_spec
-  (use [tictactoe.players]
+  (use [tictactoe.player_marks]
+       [tictactoe.players]
        [speclj.core]))
 
 (describe "players"
