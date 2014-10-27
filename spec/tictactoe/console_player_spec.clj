@@ -6,13 +6,13 @@
 (describe "console player"
   (it "asks for move"
     (with-in-str "3"
-      (let [output (with-out-str (get-move empty-board))]
+      (let [output (with-out-str (get-human-move))]
         (should= "Your move:" output))))
 
     (it "reads move from stdin"
       (with-in-str "3"
-        (should= 2 (with-redefs [*out* (new java.io.StringWriter)](get-move empty-board)))))
+        (should= 2 (with-redefs [*out* (new java.io.StringWriter)](get-human-move)))))
 
     (it "returns appropriate keyword if input is complete rubbish"
       (with-in-str "not-a-digit"
-        (should= :none (with-redefs [*out* (new java.io.StringWriter)](get-move empty-board))))))
+        (should= :none (with-redefs [*out* (new java.io.StringWriter)](get-human-move))))))

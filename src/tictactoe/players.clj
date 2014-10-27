@@ -1,15 +1,13 @@
 (ns tictactoe.players
-  (use [tictactoe.player_marks]
-       [tictactoe.console_player :as console]
-       [tictactoe.computer_player :as computer]))
+  (use [tictactoe.player_marks]))
 
-(defstruct Player :mark :get-move)
+(defstruct Player :mark :type)
 
 (defn human [mark]
-  (struct Player mark console/get-move))
+  (struct Player mark :human))
 
 (defn computer [mark]
-  (struct Player mark computer/get-computer-move))
+  (struct Player mark :computer))
 
 (def human-vs-human
   (cycle [(human x-mark) (human o-mark)]))

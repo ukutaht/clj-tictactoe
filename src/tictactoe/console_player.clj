@@ -2,7 +2,7 @@
 
 (declare valid-input? clean ask-for-move)
 
-(defn get-move [board]
+(defn get-human-move []
   (ask-for-move)
   (let [input (read-line)]
     (if (valid-input? input)

@@ -2,25 +2,28 @@
   (use [speclj.core]
        [tictactoe.board]
        [tictactoe.players]
+       [tictactoe.console_player :as console]
+       [tictactoe.computer_player :as computer]
        [tictactoe.player_marks]
        [tictactoe.io :as io]
-       [tictactoe.game]))
+       [tictactoe.game :as game]))
 
 (declare fake-moves null-io fake-players fake-player take-from)
 
 (describe "game"
+  (around [it] (with-redefs [*out*  (new java.io.StringWriter)]))
+
   (defn play-game-with-moves [moves]
-    (with-redefs [fake-moves (atom moves)
-                  *out* (new java.io.StringWriter)]
-      (play {:board empty-board :players (fake-players fake-moves)})))
+    (with-redefs [game/get-move (take-from (atom moves))]
+      (play {:board empty-board :players fake-players})))
 
-  (defn fake-players [moves]
-    (cycle [ (fake-player x-mark moves) 
-             (fake-player o-mark moves)]))
-
-  (defn fake-player [mark moves]
+  (defn fake-player [mark]
     {:mark mark
-     :get-move (take-from moves)})
+     :type :irrelevant})
+
+  (def fake-players
+    (cycle [(fake-player x-mark) 
+            (fake-player o-mark)]))
 
   (defn take-from [move-list] 
     (fn [_]
@@ -46,10 +49,8 @@
 
   (context "play turn"
     (defn play-x-turn-on-empty-board [move]
-      (with-redefs [fake-moves (atom (list move))
-                    *out*  (new java.io.StringWriter)]
-        (let [player (fake-player x-mark fake-moves)]
-          (play-turn {:board empty-board :players [player]}))))
+      (with-redefs [game/get-move (take-from (atom (list move)))]
+        (play-turn {:board empty-board :players [(fake-player x-mark)]})))
 
     (it "plays the move on board"
       (let [played (:board (play-x-turn-on-empty-board 0))]
@@ -66,6 +67,12 @@
     (it "does not rotate players if invalid move"
       (let [rest-players (:players (play-x-turn-on-empty-board 9))]
         (should-not (empty? rest-players))))
+
+    (it "dispatches to console player if human turn"
+      (should-invoke console/get-human-move (play-turn {:board empty-board :players human-vs-human})))
+
+    (it "dispatches to computer player if computer turn"
+      (should-invoke computer/get-computer-move (play-turn {:board empty-board :players computer-vs-human})))
 
     (it "shows the board"
       (should-invoke io/show-board {} (play-x-turn-on-empty-board 7)))

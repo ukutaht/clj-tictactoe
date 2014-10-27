@@ -2,10 +2,10 @@
   (use [tictactoe.board]
        [tictactoe.player_marks]))
 
-(declare negamax opponent-of score successors negamax-values index-of-max)
+(declare negamax score successors negamax-values index-of-max)
 
-(defn get-computer-move [board]
-  (let [negamax-values (negamax-values board x-mark)
+(defn get-computer-move [board mark]
+  (let [negamax-values (negamax-values board mark)
         best-move-index (index-of-max negamax-values)]
        (nth (valid-moves board) best-move-index)))
 
@@ -29,8 +29,3 @@
       (= winner-mark mark) 1
       (= winner-mark (opponent-of mark)) -1
       :else 0)))
-
-(defn opponent-of [mark]
-  (if (= mark x-mark)
-    o-mark
-    x-mark))
