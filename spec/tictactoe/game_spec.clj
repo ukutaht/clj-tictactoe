@@ -12,7 +12,7 @@
   (defn play-game-with-moves [moves]
     (with-redefs [fake-moves (atom moves)
                   *out* (new java.io.StringWriter)]
-      (play empty-board (fake-players fake-moves))))
+      (play {:board empty-board :players (fake-players fake-moves)})))
 
   (defn fake-players [moves]
     (cycle [ (fake-player x-mark moves) 
@@ -44,23 +44,31 @@
     (it "announces winner with o winner"
       (should-invoke io/announce-results {} (play-game-with-moves '(0 1 2 4 3 6 5 8 7))))
 
-  (context "play move"
-    (defn play-x-move-on-empty-board [move]
+  (context "play turn"
+    (defn play-x-turn-on-empty-board [move]
       (with-redefs [fake-moves (atom (list move))
                     *out*  (new java.io.StringWriter)]
         (let [player (fake-player x-mark fake-moves)]
-          (play-move empty-board player))))
+          (play-turn {:board empty-board :players [player]}))))
 
     (it "plays the move on board"
-      (let [played (play-x-move-on-empty-board 0)]
+      (let [played (:board (play-x-turn-on-empty-board 0))]
         (should= (square-at played 0) x-mark)))
 
     (it "does not make the move if it is invalid"
-      (let [played (play-x-move-on-empty-board 9)]
+      (let [played (:board (play-x-turn-on-empty-board 9))]
         (should= empty-board played)))
 
+    (it "returns the rest of the players if valid move"
+      (let [rest-players (:players (play-x-turn-on-empty-board 7))]
+        (should-be empty? rest-players)))
+
+    (it "does not rotate players if invalid move"
+      (let [rest-players (:players (play-x-turn-on-empty-board 9))]
+        (should-not (empty? rest-players))))
+
     (it "shows the board"
-      (should-invoke io/show-board {} (play-x-move-on-empty-board 7)))
+      (should-invoke io/show-board {} (play-x-turn-on-empty-board 7)))
 
     (it "notifies io if move is invalid"
-      (should-invoke io/notify-invalid-move {} (play-x-move-on-empty-board 9)))))
+      (should-invoke io/notify-invalid-move {} (play-x-turn-on-empty-board 9)))))
