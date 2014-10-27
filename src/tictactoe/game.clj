@@ -21,6 +21,16 @@
         (io/notify-invalid-move)
         game))))
 
+(defn- make-move [{:keys [board players]} move]
+  (let [player (first players)]
+    {:board (mark-square board move (player :mark))
+     :players (rest players)}))
+
+(defn- we-have-a-winner [board]
+  (io/show-board board)
+  (io/announce-results board)
+  board)
+
 (defmulti get-move (fn [game] (:type (current-player game))))
 
 (defmethod get-move :human [game]
@@ -31,16 +41,6 @@
 
 (defn- current-player [game]
   (first (:players game)))
-
-(defn- make-move [{:keys [board players]} move]
-  (let [player (first players)]
-    {:board (mark-square board move (player :mark))
-     :players (rest players)}))
-
-(defn- we-have-a-winner [board]
-  (io/show-board board)
-  (io/announce-results board)
-  board)
 
 (defn -main []
   (play {:board empty-board :players computer-vs-human}))
