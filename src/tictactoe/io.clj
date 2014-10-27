@@ -4,8 +4,6 @@
 
 (declare clear-screen show-board present-winner lines render-line format-cell present-draw)
 
-(defstruct GameIO :show-board :announce-results :notify-invalid-move)
-
 (defn show-board [board]
   (println)
   (println (apply str (lines board))))
@@ -38,5 +36,3 @@
 
 (defmethod format-cell clojure.lang.Keyword [mark]
   (upper-case (name mark)))
-
-(def command-line-io (struct GameIO show-board announce-results notify-invalid-move))

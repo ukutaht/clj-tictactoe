@@ -10,8 +10,9 @@
 
 (describe "game"
   (defn play-game-with-moves [moves]
-    (with-redefs [fake-moves (atom moves)]
-      (play empty-board (fake-players fake-moves) null-io)))
+    (with-redefs [fake-moves (atom moves)
+                  *out* (new java.io.StringWriter)]
+      (play empty-board (fake-players fake-moves))))
 
   (defn fake-players [moves]
     (cycle [ (fake-player x-mark moves) 
@@ -20,11 +21,6 @@
   (defn fake-player [mark moves]
     {:mark mark
      :get-move (take-from moves)})
-
-  (def null-io
-    {:show-board (fn [_board])
-     :announce-results (fn [_board])
-     :notify-invalid-move (fn [])})
 
   (defn take-from [move-list] 
     (fn [_]
@@ -45,11 +41,15 @@
       (let [result (play-game-with-moves '(0 1 2 4 3 6 5 8 7))]
         (should-be draw? result))))
 
+    (it "announces winner with o winner"
+      (should-invoke io/announce-results {} (play-game-with-moves '(0 1 2 4 3 6 5 8 7))))
+
   (context "play move"
     (defn play-x-move-on-empty-board [move]
-      (with-redefs [fake-moves (atom (list move))]
+      (with-redefs [fake-moves (atom (list move))
+                    *out*  (new java.io.StringWriter)]
         (let [player (fake-player x-mark fake-moves)]
-          (play-move empty-board player null-io))))
+          (play-move empty-board player))))
 
     (it "plays the move on board"
       (let [played (play-x-move-on-empty-board 0)]
@@ -60,7 +60,7 @@
         (should= empty-board played)))
 
     (it "shows the board"
-      (should-invoke null-io {:with [:show-board] :invoke null-io} (play-x-move-on-empty-board 7)))
+      (should-invoke io/show-board {} (play-x-move-on-empty-board 7)))
 
     (it "notifies io if move is invalid"
-      (should-invoke null-io {:with [:notify-invalid-move] :invoke null-io} (play-x-move-on-empty-board 9)))))
+      (should-invoke io/notify-invalid-move {} (play-x-move-on-empty-board 9)))))

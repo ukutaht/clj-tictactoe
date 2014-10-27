@@ -40,11 +40,9 @@
 (defn has-winner? [board]
   (not (nil? (winner board))))
 
-(def no-winner? (complement has-winner?))
-
 (defn draw? [board]
   (and
-    (no-winner? board)
+    (not (has-winner? board))
     (every? player? board)))
 
 (defn winner [board]
