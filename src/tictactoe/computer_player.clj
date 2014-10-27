@@ -24,10 +24,11 @@
   (.indexOf coll (apply max coll)))
 
 (defn score [board mark]
-  (cond 
-    (draw? board) 0
-    (= (winner board) mark) 1
-    :else -1))
+  (let [winner-mark (winner board)]
+    (cond
+      (= winner-mark mark) 1
+      (= winner-mark (opponent-of mark)) -1
+      :else 0)))
 
 (defn opponent-of [mark]
   (if (= mark x-mark)
