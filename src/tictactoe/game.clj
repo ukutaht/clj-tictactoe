@@ -1,11 +1,14 @@
 (ns tictactoe.game
   (use [tictactoe.board]
        [tictactoe.players]
-       [tictactoe.console_player]
        [tictactoe.computer_player]
        [tictactoe.io :as io]))
 
-(declare play-turn make-move we-have-a-winner get-move current-player)
+(declare play-turn make-move we-have-a-winner get-move current-player play)
+
+(defn get-player-options-and-play []
+  (let [players (player-combinations (get-player-types))]
+    (play {:board empty-board :players players})))
 
 (defn play [{:keys [board] :as game}]
   (if (over? board)
@@ -34,7 +37,7 @@
 (defmulti get-move (fn [game] (:type (current-player game))))
 
 (defmethod get-move :human [game]
-  (get-human-move))
+  (io/get-human-move))
 
 (defmethod get-move :computer [game]
   (get-computer-move (:board game) (:mark (current-player game))))
@@ -43,4 +46,4 @@
   (first (:players game)))
 
 (defn -main []
-  (play {:board empty-board :players computer-vs-human}))
+  (get-player-options-and-play))

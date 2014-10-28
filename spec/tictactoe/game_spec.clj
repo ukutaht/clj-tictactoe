@@ -2,7 +2,6 @@
   (use [speclj.core]
        [tictactoe.board]
        [tictactoe.players]
-       [tictactoe.console_player :as console]
        [tictactoe.computer_player :as computer]
        [tictactoe.player_marks]
        [tictactoe.io :as io]
@@ -68,8 +67,8 @@
       (let [rest-players (:players (play-x-turn-on-empty-board 9))]
         (should-not (empty? rest-players))))
 
-    (it "dispatches to console player if human turn"
-      (should-invoke console/get-human-move (play-turn {:board empty-board :players human-vs-human})))
+    (it "dispatches to io if human turn"
+      (should-invoke io/get-human-move (play-turn {:board empty-board :players human-vs-human})))
 
     (it "dispatches to computer player if computer turn"
       (should-invoke computer/get-computer-move (play-turn {:board empty-board :players computer-vs-human})))
