@@ -2,30 +2,29 @@
   (use [tictactoe.board]
        [tictactoe.player_marks]))
 
-(declare negamax score successors negamax-values index-of-max)
+(defn successors [board mark]
+  (map #(mark-square board % mark) (valid-moves board)))
 
-(defn get-computer-move [board mark]
-  (let [negamax-values (negamax-values board mark)
-        best-move-index (index-of-max negamax-values)]
-       (nth (valid-moves board) best-move-index)))
-
-(defn negamax-values [board mark]
-  (map #(- (negamax %1 (opponent-of mark))) (successors board mark))) 
+(defn score [board mark]
+  (let [winner (winner board)]
+    (cond 
+      (= winner mark) 1 
+      (= winner (opponent-of mark)) -1
+      :else 0)))
 
 (defn negamax [board mark]
   (if (over? board)
     (score board mark)
-    (apply max (negamax-values board mark))))
+    (apply max (map #(- (negamax % (opponent-of mark))) (successors board mark))))) 
 
-(defn successors [board mark]
-  (map #(mark-square board %1 mark) (valid-moves board)))
-
-(defn index-of-max [coll]
-  (.indexOf coll (apply max coll)))
-
-(defn score [board mark]
-  (let [winner-mark (winner board)]
-    (cond
-      (= winner-mark mark) 1
-      (= winner-mark (opponent-of mark)) -1
-      :else 0)))
+(defn get-computer-move [board mark]
+  (loop [valid-moves (valid-moves board)
+         best-score -1
+         best-move -1]
+    (if (or (= best-score 1) (empty? valid-moves))
+        best-move
+        (let [move (first valid-moves)
+              score (- (negamax (mark-square board move mark) (opponent-of mark)))]
+          (if (> score best-score)
+            (recur (rest valid-moves) score move)
+            (recur (rest valid-moves) best-score best-move))))))

@@ -45,11 +45,14 @@
     (not (has-winner? board))
     (every? player? board)))
 
-(defn winner [board]
+
+(defn unefficient-winner [board]
   (-> board
       resolve-combinations
       keep-all-same-lines
       get-the-mark))
+
+(def winner (memoize unefficient-winner))
 
 (defn rows [board]
   (partition 3 board))
