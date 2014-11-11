@@ -25,5 +25,4 @@
   {:human-vs-human human-vs-human
    :human-vs-computer human-vs-computer
    :computer-vs-human computer-vs-human
-   :computer-vs-computer computer-vs-computer
-   })
+   :computer-vs-computer computer-vs-computer})

@@ -60,7 +60,7 @@
 (defn- keep-all-same-lines [combinations]
   (filter all-same? combinations))
 
-(defn get-the-mark [combinations]
+(defn- get-the-mark [combinations]
   (first (first combinations)))
 
 (defn- resolve-combination [board combination]
