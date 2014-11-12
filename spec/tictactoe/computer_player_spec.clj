@@ -28,23 +28,23 @@
 
   (context "negamax"
     (it "returns the score from the current players perspective if game is over"
-      (should= 1 (negamax x-wins-board x)))
+      (should= 1 (negamax x-wins-board x -10 10)))
 
     (it "returns the score from the current players perspective if game is over"
-      (should= -1 (negamax x-wins-board o)))
+      (should= -1 (negamax x-wins-board o -10 10)))
 
     (it "returns 1 if the player can win"
-      (should= 1 (negamax  [x x 2 3 4 5 6 o o] x)))
+      (should= 1 (negamax  [x x 2 3 4 5 6 o o] x -10 10)))
 
     (it "returns 0 if the player can draw but not win"
       (should= 0 (negamax [x o 2 
                            x o 5 
-                           o x x] x)))
+                           o x x] x -10 10)))
 
     (it "returns -1 if the player has lost"
       (should= -1 (negamax [x o 2 
                            o o 5 
-                           o x x] x)))))
+                           o x x] x -10 10)))))
 
 (describe "optimal player"
   (it "takes win"
