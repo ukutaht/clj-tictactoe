@@ -28,38 +28,39 @@
 
   (context "negamax"
     (it "returns the score from the current players perspective if game is over"
-      (should= 1 (negamax x-wins-board x -10 10)))
+      (should= 1 (negamax -10 10 x-wins-board x)))
 
     (it "returns the score from the current players perspective if game is over"
-      (should= -1 (negamax x-wins-board o -10 10)))
+      (should= -1 (negamax -10 10 x-wins-board o)))
 
     (it "returns 1 if the player can win"
-      (should= 1 (negamax  [x x 2 3 4 5 6 o o] x -10 10)))
+      (should= 1 (negamax -10 10 [x x 2 3 4 5 6 o o] x)))
 
     (it "returns 0 if the player can draw but not win"
-      (should= 0 (negamax [x o 2 
-                           x o 5 
-                           o x x] x -10 10)))
+      (should= 0 (negamax -10 10 [x o 2 
+                                  x o 5 
+                                  o x x] x)))
 
     (it "returns -1 if the player has lost"
-      (should= -1 (negamax [x o 2 
-                           o o 5 
-                           o x x] x -10 10)))))
+      (should= -1 (negamax -10 10 [x o 2 
+                                   o o 5 
+                                   o x x] x)))))
 
 (describe "optimal player"
   (it "takes win"
     (should= 0 (get-computer-move [0 x x
-                                   o o 5
-                                   6 7 8] x)))
+                                   o 4 5
+                                   o 7 8] x)))
   (it "blocks opponent win"
     (should= 5 (get-computer-move [0 1 x
                                    o o 5
                                    x 7 8] x)))
 
   (it "forks"
-    (should= 4 (get-computer-move [x o 2
-                                   o 4 5
-                                   x 7 8] x)))
+    (should-contain (get-computer-move [x o 2
+                                        o 4 5
+                                        x 7 8] x)
+                    [4 8]))
 
   (it "forces defense when opponent threatens to fork"
     (should-contain (get-computer-move [0 1 x 

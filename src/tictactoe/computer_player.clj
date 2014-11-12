@@ -12,7 +12,7 @@
       (= winner (opponent-of mark)) -1
       :else 0)))
 
-(defn negamax [board mark alpha beta]
+(defn negamax [alpha beta board mark]
   (if (over? board)
     (score board mark)
     (loop [best-score -1
@@ -21,24 +21,20 @@
            beta beta]
       (if (empty? boards)
         best-score
-        (let [score (- (negamax (first boards) (opponent-of mark) (- beta) (- alpha)))
+        (let [score (- (negamax (- beta) (- alpha) (first boards) (opponent-of mark)))
               new-best-score (max score best-score)
               new-alpha (max alpha score)]
           (if (>= new-alpha beta)
             new-best-score 
             (recur new-best-score (rest boards) new-alpha beta)))))))
 
+(defn call-negamax [mark board] (- (negamax -10 10 board (opponent-of mark))))
+
+(defn moves-with-scores [board mark]
+  (map vector (valid-moves board) 
+              (map (partial call-negamax mark) (successors board mark)))  )
+
 (defn get-computer-move [board mark]
-  (loop [valid-moves (valid-moves board)
-         best-score -1
-         best-move -1]
-    (if (or (= best-score 1) (empty? valid-moves))
-        best-move
-        (let [move (first valid-moves)
-              score (- (negamax (mark-square board move mark)
-                                (opponent-of mark)
-                                -10
-                                 10))]
-          (if (> score best-score)
-            (recur (rest valid-moves) score move)
-            (recur (rest valid-moves) best-score best-move))))))
+  (->> (moves-with-scores board mark)
+       (apply max-key second)
+        first))
